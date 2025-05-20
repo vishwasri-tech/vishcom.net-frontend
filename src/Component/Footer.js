@@ -20,9 +20,9 @@ function Footer() {
       <Link to="/services#marketing">Marketing</Link>
       <div className="social-icons">
         <h4>Follow Us</h4>
-        <a href="https://www.instagram.com/vishwasri_technologies_01/" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faInstagram} /></a>
+        <a href="https://www.instagram.com/vishwasri_technologies/" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faInstagram} /></a>
         <a href="https://www.youtube.com/@VISHWASRITECHNOLOGIES" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faYoutube} /></a>
-        <a href="https://www.linkedin.com/in/vishwasri-technologies-330005331/" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faLinkedin} /></a>
+        <a href="https://www.linkedin.com/company/vishwasritechnologies-pvt-ltd" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faLinkedin} /></a>
         <a href="https://www.vishcom.net" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faGoogle} /></a>
       </div>
     </div>
