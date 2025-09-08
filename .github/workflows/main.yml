@@ -29,20 +29,24 @@ jobs:
           HOST: ${{ secrets.EC2_HOST }}
           USER: ubuntu
         run: |
+          # Write the multi-line private key to a file
+          echo "$PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
           TIMESTAMP=$(date +%Y%m%d%H%M%S)
           RELEASE_DIR=/var/www/frontend/releases/$TIMESTAMP
 
           echo "🚀 Creating release folder $RELEASE_DIR"
-          ssh -i $PRIVATE_KEY $USER@$HOST "mkdir -p $RELEASE_DIR"
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "mkdir -p $RELEASE_DIR"
 
           echo "📂 Uploading build to $RELEASE_DIR"
-          scp -i $PRIVATE_KEY -r build/* $USER@$HOST:$RELEASE_DIR
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r build/* $USER@$HOST:$RELEASE_DIR
 
-          echo "🔗 Updating symlink"
-          ssh -i $PRIVATE_KEY $USER@$HOST "ln -sfn $RELEASE_DIR /var/www/frontend/current"
+          echo "🔗 Updating symlink to latest release"
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "ln -sfn $RELEASE_DIR /var/www/frontend/current"
 
           echo "🗑 Cleaning up old releases (keep last 5)"
-          ssh -i $PRIVATE_KEY $USER@$HOST "
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "
             cd /var/www/frontend/releases &&
             ls -1t | tail -n +6 | xargs -I {} rm -rf {} || true
           "
