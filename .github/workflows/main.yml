@@ -1,5 +1,5 @@
 name: Deploy Frontend
- 
+
 on:
   push:
     branches: [ "main" ]
@@ -29,7 +29,7 @@ jobs:
           HOST: ${{ secrets.EC2_HOST }}
           USER: ubuntu
         run: |
-          # Write the multi-line private key to a file
+          # Save the private key to a temporary file
           echo "$PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
 
@@ -39,13 +39,13 @@ jobs:
           echo "🚀 Creating release folder $RELEASE_DIR"
           ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "mkdir -p $RELEASE_DIR"
 
-          echo "📂 Uploading build to $RELEASE_DIR"
+          echo "📂 Uploading build files"
           scp -i private_key.pem -o StrictHostKeyChecking=no -r build/* $USER@$HOST:$RELEASE_DIR
 
-          echo "🔗 Updating symlink to latest release"
+          echo "🔗 Updating current symlink"
           ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "ln -sfn $RELEASE_DIR /var/www/frontend/current"
 
-          echo "🗑 Cleaning up old releases (keep last 5)"
+          echo "🗑 Cleaning old releases (keep last 5)"
           ssh -i private_key.pem -o StrictHostKeyChecking=no $USER@$HOST "
             cd /var/www/frontend/releases &&
             ls -1t | tail -n +6 | xargs -I {} rm -rf {} || true
